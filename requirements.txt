@@ -1,0 +1,5 @@
+django>=3.0.0
+psycopg2-binary
+Faker>=3.0.0
+gnureadline
+requests
