@@ -1,0 +1,61 @@
+
+- model: app.position
+  pk: 'P'
+  fields:
+    name: Pitcher
+    abbrev: P
+    scoring_code : 1
+- model: app.position
+  pk: 'C'
+  fields:
+    name: Catcher
+    abbrev: C
+    scoring_code : 2
+- model: app.position
+  pk: '1B'
+  fields:
+    name: First Baseman
+    abbrev: 1B
+    scoring_code : 3
+- model: app.position
+  pk: '2B'
+  fields:
+    name: Second Baseman
+    abbrev: 2B
+    scoring_code : 4
+- model: app.position
+  pk: '3B'
+  fields:
+    name: Third Baseman
+    abbrev: 3B
+    scoring_code : 5
+- model: app.position
+  pk: 'SS'
+  fields:
+    name: Shortstop
+    abbrev: SS
+    scoring_code : 6
+- model: app.position
+  pk: 'LF'
+  fields:
+    name: Left Fielder
+    abbrev: LF
+    scoring_code : 7
+- model: app.position
+  pk: 'CF'
+  fields:
+    name: Center Fielder
+    abbrev: CF
+    scoring_code : 8
+- model: app.position
+  pk: 'RF'
+  fields:
+    name: Right Fielder
+    abbrev: RF
+    scoring_code : 9
+- model: app.position
+  pk: 'SS'
+  fields:
+    name: Designated Hitter
+    abbrev: DH
+    scoring_code : 0

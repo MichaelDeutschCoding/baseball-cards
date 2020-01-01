@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block page_name %}Edit Portfolio{% endblock %}
+
+
+{% block stylesheet %}
+{% endblock %}
+
+{% block navbar %}
+{# include '' #}
+{% endblock %}
+
+{% block header %}Let's Get to Know You a Little Better{% endblock %}
+
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>
+
+
+{% endblock %}
+

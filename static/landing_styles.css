@@ -1,0 +1,16 @@
+.masthead {
+    height: 100vh;
+    min-height: 500px;
+    background-image: url(/static/app/landing_background.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+.landing-text {
+  color: white;
+  font-family: 'Bevan', cursive;
+  font-weight: 500;
+  font-size: 50px;
+  text-shadow: 7px 8px 5px rgba(100, 100, 100, 0.72)
+}

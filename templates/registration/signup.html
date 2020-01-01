@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block page_name %}Sign Up{% endblock %}
+
+
+{% block stylesheet %}
+
+{% endblock %}
+
+
+{% block header %}Welcome to Our Community{% endblock %}
+
+
+{% block content %}
+
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-info">Sign Up</button>
+</form>
+
+{% endblock %}

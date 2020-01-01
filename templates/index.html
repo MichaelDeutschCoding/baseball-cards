@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_name %}Home{% endblock %}
+{% block header %}Home Page{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    Hi {{ user.username }}
+    <a class="btn btn-info" href="{% url 'new-deck' %}">Make a Deck</a>
+    <a class="btn btn-info" href="{% url 'view-deck' %}">See My Deck</a>
+{% else %}
+<p>You are not logged in</p>
+<a href="{% url 'login' %}">Log In</a>
+{% endif %}
+
+<img width="100%" src="{% static 'app/1280px-Major_League_Baseball_logo.svg.png' %}">
+{% endblock %}

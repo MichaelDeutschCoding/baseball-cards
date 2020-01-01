@@ -1,3 +1,7 @@
 body{
     background-color:pink;
 }
+
+.table td {
+    padding: 0;
+}

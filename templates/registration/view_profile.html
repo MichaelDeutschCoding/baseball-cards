@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block page_name %}Profile{% endblock %}
+
+
+{% block page_styles %}
+{% endblock %}
+
+{% block navbar %}
+{# include '' #}
+{% endblock %}
+
+{% block header %}Profile Page for: <strong>{{ profile.user }}</strong>{% endblock %}
+
+
+{% block content %}
+
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-text">STUFF Here</h1>
+
+        <table class="table" style="font-size:1rem;">
+            <tr>
+                <td>First Name</td>
+                <td>{{ profile.first_name }}</td>
+            </tr>
+            <tr>
+                <td>Last Name</td>
+                <td>{{ profile.last_name }}</td>
+            </tr>
+            <tr>
+                <td>Birthdate</td>
+                <td>{{ profile.birthdate }}</td>
+            </tr>
+            <tr>
+                <td>Favorite Team</td>
+                <td>{{ profile.favorite_team.name }}</td>
+            </tr>
+            <tr>
+                <td>Favorite Player</td>
+                <td>{{ profile.favorite_player }}</td>
+            </tr>
+        </table>
+
+        <p>{{ profile.about }}</p>
+    </div>
+</div>
+
+{% endblock %}
+
