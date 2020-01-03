@@ -1,9 +1,13 @@
+import json
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from random import choice
-from .models import Deck, Card, Player
 from django.contrib import messages
+from random import choice
+from .forms import AddCommentForm
+from .models import Deck, Card, Player, Offer, Comment
 
 def index(request):
     return render(request, 'index.html')
@@ -21,9 +25,15 @@ def user_deck(request):
     except Deck.DoesNotExist:
         return redirect(reverse('error-page'))
 
+    all_cards = deck.card_set.all()
+    paginator = Paginator(all_cards, 12)
+    page = request.GET.get('page')
+    cards = paginator.get_page(page)
+
     return render(request, 'app/deck.html', {
         'deck': deck,
-        'cards': deck.card_set.all()
+        'paginator': paginator,
+        'page_obj': cards
     })
 
 
@@ -53,3 +63,37 @@ def new_deck(request):
 
     return redirect(reverse('view-deck'))
 
+@login_required
+def view_offers(request):
+    offers = Offer.objects.filter(active=True)
+
+    return render(request, 'app/offers.html', {'offers': offers})
+
+@login_required
+def offer_details(request, offer_id):
+    try:
+        offer = Offer.objects.get(id=offer_id)
+    except Offer.DoesNotExist:
+        return redirect(reverse('error-page'))
+
+    form = AddCommentForm()
+
+    return render(request, 'app/offer.html', {
+        'offer': offer,
+        'card': offer.card,
+        'comments': offer.comment_set.all(),
+        'form': form,
+    })
+
+@login_required
+def add_comment(request, offer_id):
+    comment = json.loads(request.body)
+    form = AddCommentForm(comment)
+    comment = form.save(commit=False)
+    comment.author = request.user.profile.deck
+    comment.offer_id = offer_id
+    comment.save()
+
+    return JsonResponse({
+        'comment_id': comment.pk
+    }, status=201)

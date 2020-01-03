@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block page_name %}Offer{% endblock %}
+
+
+{% block page_styles %}
+{% endblock %}
+
+
+{% block header %}Offer on a
+    {% if card.signed %}<strong><em>signed</em></strong>{% endif %}
+    {{ card.player.name }} card
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+    <div class="card m-2" style="width: 100%;">
+        <img class="card-img-top" src="{{ card.player.image }}" onerror="this.onerror=null;this.src='/media/player_pics/dimaggio.jpg';">
+        <div class="card-body">
+            <h2>{{ card.player.name }}</h2>
+            {% if card.signed %}
+            <img src="/static/app/Signature.png" alt="signature">
+            {% endif %}
+            <p>Team: {{ card.player.team }}<br>
+            <strong>Position: {{ card.player.position }}</strong>
+            {% if card.player.position.pk == 'P' %}
+            &nbsp;&nbsp;&nbsp;&nbsp;Throws: {{ card.player.pitcherstats.throws }}
+            {% endif %}</p>
+
+            <table class="table table-bordered">
+                <thead class=thead-dark>
+                    <tr>
+                        <th colspan="2">STATS</th>
+                    </tr>
+                </thead>
+                <tbody>
+            {% if card.player.position.pk == 'P' %}
+                <tr>
+                    <td>ERA</td>
+                    <td>{{ card.player.pitcherstats.era }}</td>
+                </tr>
+                <tr>
+                    <td>K per 9</td>
+                    <td>{{ card.player.pitcherstats.k_per_9 }}</td>
+                </tr>
+                <tr>
+                    <td>Walks per 9</td>
+                    <td>{{ card.player.pitcherstats.bb_per_9 }}</td>
+                </tr>
+                <tr>
+                    <td>K to Walks</td>
+                    <td>{{ card.player.pitcherstats.k_bb }}</td>
+                </tr>
+                <tr>
+                    <td>Total Innings</td>
+                    <td>{{ card.player.pitcherstats.innings }}</td>
+                </tr
+            {% else %}
+            <tr>
+                <td>Batting Average</td>
+                <td>{{ card.player.hitterstats.avg }}</td>
+            </tr>
+            <tr>
+                <td>Slugging</td>
+                <td>{{ card.player.hitterstats.slg }}</td>
+            </tr>
+            <tr>
+                <td>OPS</td>
+                <td>{{ card.player.hitterstats.ops }}</td>
+            </tr>
+            <tr>
+                <td>Hits</td>
+                <td>{{ card.player.hitterstats.hits }}</td>
+            </tr>
+            <tr>
+                <td>RBI</td>
+                <td>{{ card.player.hitterstats.rbi }}</td>
+            </tr>
+            <tr>
+                <td>Strikeouts</td>
+                <td>{{ card.player.hitterstats.so }}</td>
+            </tr>
+
+            {% endif %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    </div>
+    <div class="col">
+        <h2>Owned By: {{ offer.seller }}</h2>
+        <h3>Asking Price: {{ offer.price }} credits</h3>
+        <h3>Offered on: {{ offer.created_on }}</h3>
+        <p>Available: {{ offer.active }}</p>
+    </div>
+</div>
+<div id="comment-area">
+{% for comment in comments %}
+    <div class="card">
+        <div class="card-body p-2">
+        <h4 class="text-muted">{{ comment.author }}</h4>
+        <h5>{{ comment.text }}</h5>
+        <p class="small">Commented on: {{ comment.created_on }}</p>
+        </div>
+    </div>
+
+{% endfor %}
+</div>
+
+<form id="comment-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button id="submit-button" type="submit" class="btn btn-info">Submit</button>
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    $("#comment-form").submit(function(event) {
+        event.preventDefault();
+        let that = this;
+        let form_data = $(this).serializeArray();
+        let final_form_data = new Object();
+        $.each(form_data, function(index, element) {
+            final_form_data[element['name']] = element['value']
+        });
+        let csrf_token = final_form_data['csrfmiddlewaretoken'];
+        delete final_form_data['csrfmiddlewaretoken'];
+        console.log(form_data)
+        $.ajax({
+            url: "/offers/{{ offer.pk }}/comments",
+            type: "POST",
+            data: JSON.stringify(final_form_data),
+            contentType: "application/json",
+            headers: {
+                'X-CSRFToken': csrf_token
+            }
+        }).done(function(response) {
+            $(that).trigger("reset");
+        });
+    });
+
+
+</script>
+
+{% endblock %}

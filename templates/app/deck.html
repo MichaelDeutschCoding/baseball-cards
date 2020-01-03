@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block page_name %}Deck{% endblock %}
 
 
 {% block page_styles %}
+<style>
+    body {
+        background: url({% static '/app/background_grass.jpg' %}) no-repeat center center fixed;
+    }
+</style>
 {% endblock %}
 
 
@@ -11,9 +17,30 @@
 
 {% block content %}
 
-<h4>Credits: {{ deck.credits }}</h4>
+<h4 class="text-center">Credits: {{ deck.credits }}</h4>
+
+<ul class="pagination justify-content-center">
+  {% if page_obj.has_previous %}
+  <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+  {% else %}
+  <li class="page-item disabled"><a class="page-link" href="#"><span>&laquo;</span></a></li>
+  {% endif %}
+  {% for i in paginator.page_range %}
+  {% if page_obj.number == i %}
+  <li class="page-item active"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a></li>
+  {% else %}
+  <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+  {% endif %}
+  {% endfor %}
+  {% if page_obj.has_next %}
+  <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+  {% else %}
+  <li class="page-item disabled"><a class="page-link" href="#"><span>&raquo;</span></a></li>
+  {% endif %}
+</ul>
+
 <div class="row">
-{% for card in cards %}
+{% for card in page_obj %}
 <div class="card m-2" style="width: 22rem;">
     <img class="card-img-top" src="{{ card.player.image }}" onerror="this.onerror=null;this.src='/media/player_pics/dimaggio.jpg';">
     <div class="card-body">
@@ -89,6 +116,5 @@
 </div>
 {% endfor %}
 </div>
-
 {% endblock %}
 

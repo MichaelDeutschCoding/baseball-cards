@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block page_name %}Offers{% endblock %}
+
+
+{% block page_styles %}
+{% endblock %}
+
+
+{% block header %}Active Offers{% endblock %}
+
+
+{% block content %}
+{% for offer in offers %}
+<div class="card">
+    <div class="row align-items-center">
+        <div class="col-6">
+            <h6>Available from: {{ offer.seller }}</h6>
+            <h3>{{ offer.card.player }}</h3>
+            {% if offer.card.signed %}<strong>SIGNED</strong>{% endif %}
+        </div>
+        <div class="col-4">
+            Asking: {{ offer.price }} credits<br>
+            Available since: {{ offer.created_on }}<br>
+            Comments: {{ offer.comment_set.count }}
+        </div>
+        <div class="col-2">
+            <a class="btn btn-info" href="{% url 'offer-details' offer.pk %}">See Offer</a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
