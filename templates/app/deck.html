@@ -13,7 +13,12 @@
 {% endblock %}
 
 
-{% block header %}{{ user.username}}'s Deck{% endblock %}
+{% block header %}
+    {{ user.username}}'s Deck
+    <span style="float:right;">
+        <a class="btn btn-secondary" href="{% url 'new-offer' %}">New Offer</a>
+    </span>
+{% endblock %}
 
 {% block content %}
 

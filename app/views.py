@@ -6,8 +6,9 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
 from random import choice
-from .forms import AddCommentForm
-from .models import Deck, Card, Player, Offer, Comment
+from .forms import AddCommentForm, CreateOfferForm
+from .models import Deck, Card, Player, Offer, Comment, Transaction
+
 
 def index(request):
     return render(request, 'index.html')
@@ -70,6 +71,12 @@ def view_offers(request):
     return render(request, 'app/offers.html', {'offers': offers})
 
 @login_required
+def old_offers(request):
+    offers = Offer.objects.filter(active=False)
+
+    return render(request, 'app/offers.html', {'offers': offers})
+
+@login_required
 def offer_details(request, offer_id):
     try:
         offer = Offer.objects.get(id=offer_id)
@@ -97,3 +104,46 @@ def add_comment(request, offer_id):
     return JsonResponse({
         'comment_id': comment.pk
     }, status=201)
+
+
+@login_required
+def new_offer(request):
+
+    seller = request.user.profile.deck
+    if request.method == 'POST':
+        print(request.POST)
+        form = CreateOfferForm(data=request.POST, deck=seller)
+        if form.is_valid():
+            offer = Offer(
+                seller=seller,
+                card=form.cleaned_data['card'],
+                price=form.cleaned_data['price']
+            )
+            offer.save()
+            messages.info(request, 'Offer created.')
+            return redirect(reverse('view-deck'))
+
+    else:
+        form = CreateOfferForm(seller)
+
+    return render(request, 'app/new_offer.html', {'form': form})
+
+@login_required
+def buy(request, offer_id):
+    try:
+        offer = Offer.objects.get(id=offer_id)
+    except Offer.DoesNotExist:
+        return redirect(reverse('error-page'))
+
+    Transaction(
+        offer=offer,
+        buyer=request.user.profile.deck
+    ).save()
+    messages.info(request, 'Purchase successful.')
+    return redirect(reverse('home'))
+
+@login_required
+def transaction_history(request):
+    transactions = Transaction.objects.all()
+
+    return render(request, 'app/transactions.html', {'transactions': transactions})

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block page_name %}Offer{% endblock %}
 
 
@@ -94,6 +94,9 @@
         <h3>Asking Price: {{ offer.price }} credits</h3>
         <h3>Offered on: {{ offer.created_on }}</h3>
         <p>Available: {{ offer.active }}</p>
+        {% if offer.active %}
+            <a class="btn btn-secondary" href="{% url 'buy' offer.pk %}">Buy Now!</a>
+        {% endif %}
     </div>
 </div>
 <div id="comment-area">
@@ -108,19 +111,17 @@
 
 {% endfor %}
 </div>
-
 <form id="comment-form">
     {% csrf_token %}
     {{ form.as_p }}
     <button id="submit-button" type="submit" class="btn btn-info">Submit</button>
 </form>
-
 {% endblock %}
 
 {% block scripts %}
 
 <script>
-    $("#comment-form").submit(function(event) {
+        $("#comment-form").submit(function(event) {
         event.preventDefault();
         let that = this;
         let form_data = $(this).serializeArray();

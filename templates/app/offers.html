@@ -7,7 +7,16 @@
 {% endblock %}
 
 
-{% block header %}Active Offers{% endblock %}
+{% block header %}
+{% if 'old' in request.path %}
+    Offer History
+{% else %}
+    Active Offers
+{% endif %}
+<span style="float:right;">
+    <a class="btn btn-secondary" href="{% url 'new-offer' %}">New Offer</a>
+</span>
+    {% endblock %}
 
 
 {% block content %}

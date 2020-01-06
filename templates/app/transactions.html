@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block page_name %}Transactions{% endblock %}
+
+
+{% block page_styles %}
+{% endblock %}
+
+
+{% block header %}Transaction History{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    {% for transaction in transactions %}
+    <div class="card m-2 p-2" style="width:18rem;">
+        <div class="card-title"><strong>{{ transaction.offer.card.player }}
+            {% if transaction.offer.card.signed %}<br>*SIGNED* {% endif %}</strong>
+        </div>
+        Sold By: {{ transaction.offer.seller }}<br>
+        Buyer: {{ transaction.buyer }}<br>
+        Price: {{ transaction.offer.price }}<br>
+        Date: {{ transaction.date }}<br>
+        <small>Comments: {{ transaction.offer.comment_set.count }}</small>
+        <a class="btn btn-secondary" href="{% url 'offer-details' transaction.offer.pk %}">See Offer</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

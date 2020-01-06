@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block page_name %}New Offer{% endblock %}
+
+
+{% block page_styles %}
+{% endblock %}
+
+
+{% block header %}New Offer{% endblock %}
+
+
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Make Offer</button>
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
